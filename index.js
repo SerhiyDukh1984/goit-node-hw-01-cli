@@ -1,7 +1,6 @@
-const {listContacts, getContactById} = require('./contacts');
-// const argv = require("yargs").argv;
+const {listContacts, getContactById, addContact, removeContact} = require('./contacts');
+const argv = require('yargs').argv;
 
-// TODO: рефакторить
 async function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
     case "list":
@@ -10,15 +9,19 @@ async function invokeAction({ action, id, name, email, phone }) {
       break;
 
     case "get":
-      // ... id
+            const contactById = await getContactById(id);
+            console.log(contactById)
       break;
 
     case "add":
-      // ... name email phone
+            const newContactEl = await addContact(name, email, phone);
+            console.log(newContactEl)
       break;
 
     case "remove":
-      // ... id
+            const contactEl = await removeContact(id);
+            console.log(contactEl);
+            break;
       break;
 
     default:
@@ -26,4 +29,17 @@ async function invokeAction({ action, id, name, email, phone }) {
   }
 }
 
-invokeAction({ action: 'list'});
+// invokeAction({ action: 'list'});
+// invokeAction({ action: 'get', id: '3'});
+// invokeAction({ action: 'add', name: 'Міша', email: 'tsynkevych@gmail.com', phone: '123-456-7890' });
+// invokeAction({ action: 'remove', id: '10'})
+
+invokeAction(argv);
+
+
+// COMANDS FOR TERMINAL
+
+// node index.js --action="list"
+// node index.js --action="get" --id=5
+// node index.js --action="add" --name="Bob" --email="bob@gmail.com" --phone="322-22-44"
+// node index.js --action="remove" --id=3
