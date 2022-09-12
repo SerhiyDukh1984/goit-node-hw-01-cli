@@ -1,11 +1,23 @@
-const {listContacts, getContactById, addContact, removeContact} = require('./contacts');
-const argv = require('yargs').argv;
+const { listContacts, getContactById, addContact, removeContact } = require('./contacts');
+const { Command } = require("commander");
+const program = new Command();
+
+program
+.option("-a, --action <type>", "choose action")
+.option("-i, --id <type>", "user id")
+.option("-n, --name <type>", "user name")
+.option("-e, --email <type>", "user email")
+.option("-p, --phone <type>", "user phone");
+
+program.parse(process.argv);
+
+const argv = program.opts();
 
 async function invokeAction({ action, id, name, email, phone }) {
   switch (action) {
     case "list":
           const contactsList = await listContacts();
-          console.log(contactsList);
+          console.table(contactsList);
       break;
 
     case "get":
@@ -22,24 +34,10 @@ async function invokeAction({ action, id, name, email, phone }) {
             const contactEl = await removeContact(id);
             console.log(contactEl);
             break;
-      break;
 
     default:
       console.warn("\x1B[31m Unknown action type!");
   }
 }
 
-// invokeAction({ action: 'list'});
-// invokeAction({ action: 'get', id: '3'});
-// invokeAction({ action: 'add', name: 'Міша', email: 'tsynkevych@gmail.com', phone: '123-456-7890' });
-// invokeAction({ action: 'remove', id: '10'})
-
 invokeAction(argv);
-
-
-// COMANDS FOR TERMINAL
-
-// node index.js --action="list"
-// node index.js --action="get" --id=5
-// node index.js --action="add" --name="Bob" --email="bob@gmail.com" --phone="322-22-44"
-// node index.js --action="remove" --id=3
